@@ -1,6 +1,8 @@
+export type QuestionType = 'multiple_choice' | 'true_false' | 'reorder' | 'riddle' | 'timed';
+
 export interface Question {
   id: string;
-  type: 'multiple_choice' | 'true_false' | 'reorder' | 'riddle' | 'timed';
+  type: QuestionType;
   prompt: string;
   options?: string[];
   correctAnswer: string;
