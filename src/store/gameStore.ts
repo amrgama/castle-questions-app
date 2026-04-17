@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { questions } from '@/data/questions';
 import { validateAnswer } from '@/utils/validate';
 
-export type GamePhase = 'home' | 'wizard' | 'question' | 'feedback' | 'transition' | 'victory' | 'gameover';
+export type GamePhase = 'home' | 'wizard' | 'question' | 'feedback' | 'transition' | 'retry' | 'victory' | 'gameover';
 
 export interface QuestionHistoryItem {
   questionId: string;
