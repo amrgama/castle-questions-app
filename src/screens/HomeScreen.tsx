@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '@/navigation/AppNavigator';
+import { useGameStore } from '@/store/gameStore';
 import GateScene from '@/scene/GateScene';
 
 type Props = StackScreenProps<RootStackParamList, 'Home'>;
@@ -9,8 +10,10 @@ type Props = StackScreenProps<RootStackParamList, 'Home'>;
 const { height } = Dimensions.get('window');
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
+  const setPhase = useGameStore((state) => state.setPhase);
+
   const handleEnterCastle = () => {
-    // TODO: Play door creak sound
+    setPhase('wizard');
     navigation.navigate('Game');
   };
 

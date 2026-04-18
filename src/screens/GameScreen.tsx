@@ -1,16 +1,37 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from '@/navigation/AppNavigator';
+import React, { useEffect } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useGameStore } from '@/store/gameStore';
+import CorridorScene from '@/scene/CorridorScene';
+import PhaseOverlayManager from '@/ui/PhaseOverlayManager';
 
-type Props = StackScreenProps<RootStackParamList, 'Game'>;
+const GameScreen: React.FC = () => {
+  const navigation = useNavigation();
+  const phase = useGameStore((state) => state.phase);
 
-const GameScreen: React.FC<Props> = () => {
+  useEffect(() => {
+    if (phase === 'victory') {
+      navigation.navigate('Victory' as never);
+    } else if (phase === 'gameover') {
+      navigation.navigate('GameOver' as never);
+    }
+  }, [phase, navigation]);
+
   return (
-    <View style={{ flex: 1, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ color: 'white' }}>GameScreen</Text>
+    <View style={styles.container}>
+      <CorridorScene style={styles.scene} />
+      <PhaseOverlayManager />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scene: {
+    flex: 1,
+  },
+});
 
 export default GameScreen;
