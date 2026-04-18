@@ -61,7 +61,7 @@ const TeacherScreen: React.FC = () => {
       <View style={styles.questionContent}>
         <Text style={styles.questionType}>{item.type.replace('-', ' ')}</Text>
         <Text style={styles.questionText} numberOfLines={2}>
-          {item.text}
+          {item.prompt}
         </Text>
       </View>
       <View style={styles.questionActions}>
