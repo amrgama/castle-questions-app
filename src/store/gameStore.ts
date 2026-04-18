@@ -24,6 +24,8 @@ export interface GameActions {
   submitAnswer: (answer: string) => void;
   advanceStep: () => void;
   loseLife: () => void;
+  tryAgain: () => void;
+  skipQuestion: () => void;
   resetGame: () => void;
   setPhase: (phase: GamePhase) => void;
 }
@@ -56,28 +58,45 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ],
       ...(isCorrect
         ? { doorOpen: true, score: state.score + 10, phase: 'transition' }
-        : {}),
+        : { phase: 'retry' }),
     }));
 
-    if (!isCorrect) {
-      get().loseLife();
+    if (isCorrect) {
+      // Will advance after transition
+    } else {
+      // Phase set to retry
     }
   },
 
   advanceStep: () => {
-    set((state) => ({
-      currentStep: Math.min(state.currentStep + 1, 4),
-      doorOpen: false,
-      phase: 'wizard',
-    }));
+    set((state) => {
+      const newStep = Math.min(state.currentStep + 1, 5);
+      return {
+        currentStep: newStep,
+        doorOpen: false,
+        phase: newStep > 4 ? 'victory' : 'wizard',
+      };
+    });
   },
 
   loseLife: () => {
-    set((state) => ({
-      lives: Math.max(state.lives - 1, 0),
-      obstacleVisible: true,
-      phase: 'feedback',
-    }));
+    set((state) => {
+      const newLives = Math.max(state.lives - 1, 0);
+      return {
+        lives: newLives,
+        obstacleVisible: true,
+        phase: newLives <= 0 ? 'gameover' : 'feedback',
+      };
+    });
+  },
+
+  tryAgain: () => {
+    set({ phase: 'question' });
+  },
+
+  skipQuestion: () => {
+    get().loseLife();
+    get().advanceStep();
   },
 
   resetGame: () => {
